@@ -1,0 +1,41 @@
+<script >
+import PocketBase from 'pocketbase';
+
+const client = new PocketBase('http://localhost:8090');
+
+let resultdata = []
+async function getdata(){
+ const authData = client.Admins.authViaEmail("bobwatcherx@gmail.com", "amigos2010");
+
+  // const authData = await client.Users.authViaEmail("youtube@gmail.com", "admin12345");
+if(authData){
+ realdata()
+}
+}
+getdata()
+async function realdata(){
+     const  resultList = await client.Records.getList("testapp", 1, 50);
+resultdata = resultList.items
+}
+// Subscribe to changes in any record from the "demo" collection
+// const user = client.Realtime.subscribe("testapp", function (e) {
+//     console.log(e.record);
+//     realdata()
+// });
+
+</script>
+
+{#each resultdata as r}
+  <li>{r.name}
+    <button
+    on:click={async()=>{
+//     let promptname = prompt("change",r.name)
+//       const record = await client.Records.update("testapp", r.id, {
+//     name: promptname
+// });
+await client.Collections.delete("testapp");
+
+    }}
+    >edit</button>
+  </li>
+{/each}
